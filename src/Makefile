@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -Werror
-LDFLAGS = -lcheck -lm 
+LDFLAGS = -lcheck -lm -lquadmath
 
-TEST_DIR = test/
-OBJ_DIR = obj/
+TEST_DIR = test
+OBJ_DIR = obj
 
 SRCS = $(wildcard *.c)
 SRCS := $(filter-out test_main.c, $(SRCS))

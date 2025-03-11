@@ -1,5 +1,51 @@
-
 #include "s21_test_main.h"
+
+char *random_calculations_float128(const int a, const int b,
+                                   const int fractional_digits) {
+  __float128 f = a;
+  __float128 f1 = b;
+  __float128 res = ((f - f1) * (f + f1)) / (f * f1);
+  char *buffer = calloc(128, 1);
+  char format[12];
+  /* printf("Before sprintf, fractional digits: %d\n", fractional_digits); */
+  sprintf(format, "%%.%dQf", fractional_digits);
+  quadmath_snprintf(buffer, 128, format, res);
+  return buffer;
+}
+
+char *random_calculations_decimal(const int a, const int b) {
+  s21_decimal d1, d2, d3, d4, d5, d6, d7;
+  s21_from_int_to_decimal(a, &d1);
+  s21_from_int_to_decimal(b, &d2);
+  s21_sub(d1, d2, &d3);
+  s21_add(d1, d2, &d4);
+  s21_mul(d3, d4, &d5);
+  s21_mul(d1, d2, &d6);
+  s21_div(d5, d6, &d7);
+  char *str = decimal_to_string(&d7);
+  return str;
+  /* return NULL; */
+}
+
+int arithmetics_test() {
+  int error = 0;
+  srand(time(NULL));
+  for (int i = 0; i < 1000000; ++i) {
+    int a = 1 + rand() % 1000;
+    int b = 1 + rand() % 1000;
+    char *d_str = random_calculations_decimal(a, b);
+    char *point = strchr(d_str, '.');
+    char *f_str = random_calculations_float128(
+        a, b, point != NULL ? strlen(d_str) - 1 - (point - d_str) : 0);
+    d_str[strlen(d_str) - 1] = '\0';
+    f_str[strlen(f_str) - 1] = '\0';
+    /* printf("%s\n%s\n", d_str, f_str); */
+    error += strcmp(d_str, f_str) != 0;
+    free(d_str);
+    free(f_str);
+  }
+  return error;
+}
 
 void test_decimal_subtraction() {
   printf("\nDecimal subtraction test: \n");

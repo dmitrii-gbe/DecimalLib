@@ -88,8 +88,68 @@ char is_zero(const int *const arr, const size_t size) {
   return res;
 }
 
+char array_filled_by_zeroes_n(const size_t *const array, const int n) {
+  char result = 1;
+  for (int i = 0; i < n && result; ++i) {
+    result = array[i] == 0;
+  }
+  return result;
+}
+
+void divide_array_n(size_t *const arr, const size_t divider, const int size) {
+  for (int i = size - 1; i >= 0; --i) {
+    if (i - 1 >= 0) {
+      arr[i - 1] += (arr[i] % divider) * BASE;
+    }
+    arr[i] /= divider;
+  }
+}
+
 char approaches_limit(const size_t *const digits, const int n) {
   return all_of(digits, n, UINT32_MAX);
+}
+
+int divide_arrays_optimized(size_t *const dividend, size_t *divider,
+                            size_t *result, const int size) {
+  size_t multiplyer[DIV_HELP_ARR_SIZE], divd[DIV_HELP_ARR_SIZE],
+      divr[DIV_HELP_ARR_SIZE];
+  initialize_bytes(multiplyer, sizeof(size_t) * size);
+  initialize_bytes(divd, sizeof(size_t) * size);
+  initialize_bytes(divr, sizeof(size_t) * size);
+  initialize_bytes(result, HELPER_ARR_SIZE * sizeof(size_t));
+  for (int i = 0, j = FRACTION_DIGITS; i < DECIMAL_ARR_INT_COUNT - 1;
+       ++i, ++j) {
+    divr[j] = divider[i];
+    divd[j] = dividend[i];
+  }
+  while (!array_filled_by_zeroes_n(divr + FRACTION_DIGITS,
+                                   DECIMAL_ARR_INT_COUNT - 1)) {
+    divide_array_n(divd, max(IMPLICIT_BASE, divr[FRACTION_DIGITS]),
+                   DIV_HELP_ARR_SIZE - 3);
+    divide_array_n(divr, max(IMPLICIT_BASE, divr[FRACTION_DIGITS]),
+                   DIV_HELP_ARR_SIZE - 3);
+  }
+  size_t two[DIV_HELP_ARR_SIZE];
+  initialize_bytes(two, sizeof(size_t) * DIV_HELP_ARR_SIZE);
+  two[FRACTION_DIGITS] = 2;
+  subtract_arrays(two, divr, multiplyer, DIV_HELP_ARR_SIZE);
+  int count = 0;
+  while (!approaches_limit(divr + 2, 1)) {
+    multiply_arrays_div(divd, multiplyer, divd);
+    multiply_arrays_div(divr, multiplyer, divr);
+    subtract_arrays(two, divr, multiplyer, DIV_HELP_ARR_SIZE);
+    ++count;
+  }
+  int power = 0;
+  if (!all_of(divd, DIV_HELP_ARR_SIZE, 0)) {
+    while (divd[FRACTION_DIGITS + DECIMAL_ARR_INT_COUNT - 1] ==
+           0LLU) { // make sure divident is not zero-filled
+      multiply_array(divd, Pow(IMPLICIT_BASE, 6), DIV_HELP_ARR_SIZE);
+      power += 6;
+    }
+  }
+  copy_helper_array(divd + FRACTION_DIGITS, result, HELPER_ARR_SIZE);
+  return power;
 }
 
 int divide_arrays(size_t *const dividend, size_t *divider, size_t *result,

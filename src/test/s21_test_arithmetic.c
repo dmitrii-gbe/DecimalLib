@@ -481,6 +481,9 @@ START_TEST(test_mul_correct_6) {
 }
 END_TEST
 
+START_TEST(rand_arithmetic) { ck_assert_int_eq(arithmetics_test(), 0); }
+END_TEST
+
 Suite *add_suite(void) {
   Suite *s = suite_create("add_suite");
 
@@ -544,6 +547,14 @@ Suite *sub_suite(void) {
   tcase_add_test(tc_correct, test_decimal_subtraction);
   suite_add_tcase(s, tc_correct);
 
+  return s;
+}
+
+Suite *rand_arithmetics_suite() {
+  Suite *s = suite_create("rand_arithmetic_suite");
+  TCase *tc = tcase_create("rand_arithmetic");
+  tcase_add_test(tc, rand_arithmetic);
+  suite_add_tcase(s, tc);
   return s;
 }
 

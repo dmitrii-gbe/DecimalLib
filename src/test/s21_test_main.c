@@ -20,6 +20,7 @@ int main(void) {
   srunner_add_suite(sr, decimal_to_int_suite());
   srunner_add_suite(sr, float_to_decimal_suite());
   srunner_add_suite(sr, int_to_decimal_suite());
+  srunner_add_suite(sr, rand_arithmetics_suite());
   srunner_set_fork_status(sr, CK_NOFORK);
 
   srunner_run_all(sr, CK_NORMAL);
