@@ -18,10 +18,7 @@ void s21_pow(s21_decimal d, size_t pow, s21_decimal *const result) {
 }
 
 char compare_helper_arrays(const size_t *const arr1, const size_t *const arr2) {
-  int elder_digit_index1 = get_max_set_bit(arr1, HELPER_ARR_SIZE);
-  int elder_digit_index2 = get_max_set_bit(arr2, HELPER_ARR_SIZE);
-  int idx = max(elder_digit_index1, elder_digit_index2);
-  idx = max(idx, 0);
+  int idx = HELPER_ARR_SIZE - 1;
   while (arr1[idx] == arr2[idx] && idx > 0) {
     --idx;
   }

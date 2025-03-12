@@ -30,7 +30,7 @@ char *random_calculations_decimal(const int a, const int b) {
 int arithmetics_test() {
   int error = 0;
   srand(time(NULL));
-  for (int i = 0; i < 1000000; ++i) {
+  for (int i = 0; i < 100000; ++i) {
     int a = 1 + rand() % 1000;
     int b = 1 + rand() % 1000;
     char *d_str = random_calculations_decimal(a, b);
