@@ -113,8 +113,9 @@ Clone the repository:
 git clone https://github.com/dmitrii-gbe/DecimalLib.git
 cd DecimalLib
 make
-gcc your_app.c -I/path/to/DecimalLib -L/path/to/DecimalLib/build -ldecimal -o your_app
 ```
+- This produce static library s21_decimal.a that should be linked to your project.
+
 ## Testing
 The library includes comprehensive test coverage. To run tests:
 ```
