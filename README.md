@@ -134,3 +134,5 @@ MIT License.
 
 - Create a new Pull Request
 
+## Authors
+cinnamoa (dmitrii_gbe), meribaln, gizzarsh, lurkhowi, mohammet School21 students
